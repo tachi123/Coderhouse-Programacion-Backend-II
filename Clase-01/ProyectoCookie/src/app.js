@@ -12,6 +12,9 @@ const app = express();
  */
 app.use(cookieParser("CoderSecret"));
 
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+
 app.get('/setCookie', (req, res) => {
     res.cookie('nombre', 'Nahuel', {maxAge: 10000}); //Setear la cookie 'nombre'
     res.send('Cookie establecida correctamente');
@@ -27,7 +30,9 @@ app.get('/deleteCookie', (req,res) => {
 })
 
 app.post('/submitCookie', (req, res) => {
-    
+    const { nombre , correo } = req.body;
+    res.cookie('user', { user: correo }, { maxAge: 10000} );
+    res.send('Cookie creada!');
 })
 
 //Rutas asociadas a cookies firmadas
