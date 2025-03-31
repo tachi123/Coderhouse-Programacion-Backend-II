@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import User from '../models/user.model.js';
+import { createHash, isValidPassword } from '../utils.js';
 
 const router = Router();
 
@@ -17,7 +18,7 @@ router.post('/register', async (req, res) => {
             last_name,
             email,
             age,
-            password
+            password: createHash(password)
         })
 
         await newUser.save();
@@ -42,7 +43,7 @@ router.post('/login', async (req, res) =>{
             return res.status(401).send("Usuario no encontrado");
         }
 
-        if(!(password == user.password)){
+        if(!isValidPassword(user,password)){
             return res.status(403).send("Contraseña incorrecta")
         }
 
@@ -65,5 +66,12 @@ router.post('/logout', (req, res) => {
         }
     })
 })
+
+//Ruta POST para manejar la restauración de contraseña
+router.post('/restore-password', async (req, res) => {
+    //Crear el body de la función que me permita a mi a partir de un email
+    //pisar o restaurar la contraseña
+
+});
 
 export default router;

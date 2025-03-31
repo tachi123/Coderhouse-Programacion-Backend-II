@@ -15,6 +15,11 @@ router.get('/register', isLoggedOut, (req, res)=> {
     res.render('register')
 })
 
+//Renderizar la vista de RESTAURACIÓN
+router.get('/restore-password', isLoggedOut, (req, res)=> {
+    res.render('restore')
+})
+
 //Renderizar la vista de PERFIL
 router.get('/perfil', isLoggedIn, (req, res)=> {
     res.render('perfil', {
