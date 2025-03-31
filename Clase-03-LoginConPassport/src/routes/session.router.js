@@ -5,23 +5,9 @@ import { createHash, isValidPassword } from '../utils.js';
 const router = Router();
 
 //Registración
-router.post('/register', async (req, res) => {
+router.post('/register', passport.authenticate('register', {failureRedirect: '/failregister'}) ,async (req, res) => {
     try{
-        const { first_name, last_name, email, age, password} = req.body;
-
-        if(!first_name || !last_name || !email || !age || !password){
-            return res.status(400).send({status: false, message: "Todos los campos son requeridos"});
-        }
-
-        let newUser = new User({
-            first_name,
-            last_name,
-            email,
-            age,
-            password: createHash(password)
-        })
-
-        await newUser.save();
+        console.log('User registered');
         res.redirect('/login');
     }catch (error){
         console.log(`Error al registrar el usuario: ${error}`);
@@ -29,31 +15,35 @@ router.post('/register', async (req, res) => {
     }
 })
 
+router.get('/failregister', (req,res) => {
+    res.send({error: "Failed"})
+})
+
 //Iniciar sesión
-router.post('/login', async (req, res) =>{
+router.post('/login', passport.authenticate('login', {failureRedirect: '/faillogin'}) ,async (req, res) =>{
     try{
-        const {email, password} = req.body;
-        if(!email || !password){//Verifico que no vengan vacíos
-            return res.status(400).send({status: false, message: "Todos los campos son requeridos"});
+        if(!req.user){//Lego acá, es que el middle lo supero
+            return res.status(401).send({status: 'error', error: 'Invalid credentials'})
         }
 
-        //Buscamos el usuario a traves del email, no es necesario buscarlo por contraseña
-        const user = await User.findOne({email});
-        if(!user){
-            return res.status(401).send("Usuario no encontrado");
+        req.session.user = {
+            first_name: req.user.first_name,
+            last_name: req.user.last_name,
+            email: req.user.email,
+            age: req.user.age
         }
 
-        if(!isValidPassword(user,password)){
-            return res.status(403).send("Contraseña incorrecta")
-        }
-
-        req.session.user = user;
         res.redirect('/perfil');
     }catch (error){
         console.log(`Error al iniciar sesión`);
         res.status(500).send("Error al iniciar sesión");
     }
 })
+
+router.get('/faillogin', (req,res) => {
+    res.send({error: "Failed"})
+})
+
 
 //Cerrar sesión del usuario
 router.post('/logout', (req, res) => {

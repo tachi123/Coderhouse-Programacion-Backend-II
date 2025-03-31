@@ -1,0 +1,13 @@
+<h1>Inicio de sesión</h1>
+<form action="/api/login" method="POST">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="password">Contraseña:</label>
+    <input type="password" id="password" name="password" required>
+
+    <input type="submit" value="Iniciar sesión">
+</form>
+
+<p>¿No tienes cuenta? <a href="/register">Regístrate</a></p>
+<p>¿Olvidaste tu contraseña? <a href="/restore-password">Restaurar contraseña</a></p>
