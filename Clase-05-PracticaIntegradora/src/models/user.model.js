@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { createHash } from 'util.js';
+import { createHash } from '../utils.js';
 
 //Definimos el esquema usuario
 const userSchema = mongoose.Schema({

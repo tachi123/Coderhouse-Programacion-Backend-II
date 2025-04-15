@@ -3,13 +3,15 @@ import {fileURLToPath} from 'url';
 import { dirname } from 'path';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import config from './config/config.js';
 
 const __filename = fileURLToPath(import.meta.url);
 
 /**
  * Una private key sirve para utilizarse al momento de hacer el cifrado del token
  */
-const PRIVATE_KEY = "ClaveUltraSecreta";
+const PRIVATE_KEY = config.JWT_PRIVATE_KEY;
+const EXPIRES_TIME_TOKEN = config.JWT_EXPIRES_TIME_TOKEN;
 
 /**
  * 
@@ -19,7 +21,7 @@ const PRIVATE_KEY = "ClaveUltraSecreta";
  * El tercer argumento es el tiempo de expiración del token
  */
 export const generateToken = (user) => {
-    const token = jwt.sign(user, PRIVATE_KEY, {expiresIn: '24h'});
+    const token = jwt.sign(user, PRIVATE_KEY, {expiresIn: EXPIRES_TIME_TOKEN});
     return token;
 }
 
@@ -46,5 +48,11 @@ export const authToken = (req, res, next) => {
  * - Genera el hash del password usando el salt
  * - Devuelve el hash del password*/
 export const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+
+// Crea una constante llamada isValidPassword
+// La constante es una función que recibe un objeto user y un password como argumentos
+// Compara el password con el password hasheado almacenado en el objeto user
+// Devuelve true si el password coincide con el password hasheado, false en caso contrario
+export const isValidPassword = (user, password) => bcrypt.compareSync(password, user.password);
 
 export const __dirname = dirname(__filename);
