@@ -5,6 +5,6 @@ export const obtenerJuguetes = async () => {
     return await jugueteDAO.obtenerJuguetes;
 }
 
-export const crearJuguetes = async () => {
-    return await jugueteDAO.obtenerJuguetes;
+export const crearJuguetes = async (juguete) => {
+    return await jugueteDAO.crearJuguete(juguete);
 }

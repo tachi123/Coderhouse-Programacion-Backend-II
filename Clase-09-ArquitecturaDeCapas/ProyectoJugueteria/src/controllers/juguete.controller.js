@@ -8,7 +8,6 @@ export const obtenerJuguetes = async (req,res ) => {
     }catch(error){
         res.status(500).json({error: error.message});
     }
-    
 }
 
 export const crearJuguetes = async (req,res ) => {
