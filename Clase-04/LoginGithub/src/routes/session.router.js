@@ -14,6 +14,8 @@ router.get('/github', passport.authenticate('github', {scope: ['user:email']}), 
  * Este callback TIENE QUE COINCIDIR con el que pusimos en la aplicación de github, éste se encargará de hacer la
  * redirección final a la ventana de home, una vez que el login haya logrado establecer sesión
  */
+
+
 router.get('/githubcallback', passport.authenticate('github', {failureRedirect: '/login'}),
     async (req,res) => {
         //Nuestra estrategia nos devolverá el usuario, sólo lo agregamos a nuestro objeto de sesión
