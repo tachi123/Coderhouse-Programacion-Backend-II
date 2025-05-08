@@ -4,9 +4,12 @@ import userRouter from './routes/user.router.js';
 import orderRouter from './routes/order.router.js';
 import businessRouter from './routes/business.router.js';
 import connectDB from './config/db.config.js';
+import cors from 'cors';
 
 const app = express();
 const connection = connectDB(config.URL_MONGO);
+
+app.use(cors());
 
 //Server config
 app.use(express.json());
