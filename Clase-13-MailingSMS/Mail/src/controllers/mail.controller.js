@@ -4,13 +4,14 @@ import { transport } from '../config/mail.config.js';
 
 export const enviarCorreo = async (req, res) => {
     try{
+        const { destinatario, asunto, mensaje } = req.body;
         let result = await transport.sendMail({
             from: config.mailFrom,
-            to: config.mailTo,
-            subject: "Correo de prueba",
+            to: destinatario || config.mailTo,
+            subject: asunto  || "Correo de prueba",
             html: `
                 <div>
-                    <h1>¡Esto es un test!</h1>
+                    <h1>${mensaje || '¡Esto es un test!'}</h1>
                     <img src="cid:perrito1">
                 </div>
             `,
